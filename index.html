@@ -12,20 +12,23 @@
         @font-face { font-family: 'Antiquarian'; src: url('antiquarian.ttf') format('truetype'); font-weight: bold; }
 
         :root {
-            --ios-blur: blur(25px);
-            --ios-glass: rgba(255, 255, 255, 0.4);
-            --glow-pink: rgba(255, 182, 193, 0.8);
+            --ios-blur: blur(30px);
+            --ios-glass: rgba(255, 255, 255, 0.45);
+            --glow-pink: rgba(255, 105, 180, 0.9); /* Sharper, deeper pink */
             --ios-text: #1d1d1f;
             --ios-blue: #007aff;
             --ios-red: #ff3b30;
+            --gold-leaf: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
         }
 
+        /* 5. FAIRY WAND CURSOR */
         body, html {
             margin: 0; padding: 0; height: 100%;
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
             -webkit-font-smoothing: antialiased;
             overflow: hidden;
             background-color: #f2f2f7;
+            cursor: url('https://cur.cursors-4u.net/symbols/sym-9/sym833.cur'), auto !important;
         }
 
         .app-container {
@@ -36,86 +39,121 @@
             transition: background 1s ease-in-out;
         }
 
-        /* Background Switcher Button */
+        /* 3. ENGRAVED BUTTON & HEADER */
         .bg-switcher {
             position: absolute; top: 25px; right: 25px;
             background: var(--ios-glass); backdrop-filter: var(--ios-blur);
-            padding: 12px 20px; border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.5);
-            font-weight: 600; color: var(--ios-text);
+            padding: 12px 25px; border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.7);
+            font-weight: 700; color: var(--ios-text);
             cursor: pointer; z-index: 50;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            text-transform: uppercase; letter-spacing: 2px;
+            /* Flower pattern engraving */
+            background-image: url('https://www.transparenttextures.com/patterns/gray-floral.png');
+        }
+
+        .library-header {
+            position: relative;
+            padding: 20px 60px;
+            background-image: url('https://www.transparenttextures.com/patterns/gray-floral.png');
+            background-position: center;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            margin-bottom: 40px;
         }
 
         .library-header h1 {
             font-family: 'Antiquarian', 'Italiana', serif;
             font-weight: 800; color: var(--ios-text);
-            letter-spacing: -0.5px; margin-bottom: 50px;
-            font-size: 3rem; text-align: center;
+            letter-spacing: 2px; margin: 0;
+            font-size: 3.5rem; text-align: center;
+            text-shadow: 0 2px 10px rgba(255,255,255,0.8);
         }
 
         .shelf-container {
             width: 90%; max-width: 950px;
             background: var(--ios-glass); backdrop-filter: var(--ios-blur);
-            padding: 60px 40px; border-radius: 50px;
+            padding: 60px 40px; border-radius: 60px;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
             gap: 45px; justify-items: center;
-            border: 1px solid rgba(255,255,255,0.5);
+            border: 1px solid rgba(255,255,255,0.6);
+            box-shadow: inset 0 0 20px rgba(255,255,255,0.5);
         }
 
         .journal-book {
             width: 170px; aspect-ratio: 3 / 4;
             border-radius: 8px 24px 24px 8px;
             cursor: pointer; position: relative;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             background: white;
         }
 
+        /* 2. SUPER GLOWING PINK */
         .journal-book:hover, .journal-book.selected {
-            transform: scale(1.05) translateY(-8px);
-            box-shadow: 0 0 30px 5px var(--glow-pink);
+            transform: scale(1.08) translateY(-12px);
+            box-shadow: 0 0 50px 15px var(--glow-pink), 0 0 100px 5px rgba(255, 105, 180, 0.4);
         }
 
         .book-cover-img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px 24px 24px 8px; }
 
         .book-info {
             position: absolute; bottom: 15px; width: 88%; left: 6%;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 10px 0; text-align: center;
+            background: rgba(255, 255, 255, 0.98);
+            padding: 12px 0; text-align: center;
             font-family: 'Motherland', 'Niconne', cursive;
-            font-weight: 700; font-size: 1.2rem; color: #000; 
-            border-radius: 12px;
+            font-weight: 800; font-size: 1.3rem; color: #000; 
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
-        /* Action Buttons (Rename & Delete) */
+        /* 4. BEAUTIFUL PENCIL & DELETE BUTTONS */
         .rename-btn, .delete-btn {
-            position: absolute; width: 32px; height: 32px;
+            position: absolute; width: 38px; height: 38px;
             border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 14px; border: 2px solid white; opacity: 0; transition: 0.3s; z-index: 10;
+            font-size: 18px; border: 2px solid white; transition: 0.4s; z-index: 20;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
-        .rename-btn { top: -12px; right: -12px; background: var(--ios-blue); color: white; }
-        .delete-btn { top: -12px; left: -12px; background: var(--ios-red); color: white; }
-        
-        .journal-book:hover .rename-btn, .journal-book:hover .delete-btn { opacity: 1; }
+
+        .rename-btn { 
+            top: -15px; right: -15px; 
+            background: var(--gold-leaf); 
+            color: #443300; 
+            opacity: 0.9;
+        }
+
+        /* 1. HIDDEN DELETE BUTTON */
+        .delete-btn { 
+            top: -15px; left: -15px; 
+            background: #ff3b30; 
+            color: white; 
+            display: none; /* Hidden by default */
+        }
+
+        .edit-mode .delete-btn { display: flex; animation: pulseRed 1.5s infinite; }
+
+        @keyframes pulseRed {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 10px rgba(255, 59, 48, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); }
+        }
 
         #bookInterior {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.2); backdrop-filter: blur(30px);
+            background: rgba(255,255,255,0.1); backdrop-filter: blur(40px);
             display: none; justify-content: center; align-items: center; z-index: 100;
         }
 
         @media (max-width: 600px) {
             .shelf-container { grid-template-columns: repeat(2, 1fr); padding: 30px 15px; }
             .journal-book { width: 145px; }
-            .rename-btn, .delete-btn { opacity: 1; } /* Always show on mobile */
         }
     </style>
 </head>
 <body onload="initApp()">
 
     <div class="app-container" id="appBg">
-        <button class="bg-switcher" onclick="changeBackground()">Switch</button>
+        <button class="bg-switcher" onclick="changeBackground()">Vibe: Switch ✨</button>
         
         <div class="library-header">
             <h1>My Journals</h1>
@@ -124,15 +162,15 @@
     </div>
 
     <div id="bookInterior">
-        <button class="back-btn" onclick="closeBook()" style="position: absolute; top: 40px; left: 30px; background: var(--ios-blue); color: white; border: none; padding: 12px 24px; border-radius: 20px; font-weight: 600; cursor: pointer;">← Library</button>
+        <button class="back-btn" onclick="closeBook()" style="position: absolute; top: 40px; left: 30px; background: var(--gold-leaf); color: #443300; border: none; padding: 15px 30px; border-radius: 30px; font-weight: 800; cursor: pointer; font-family: 'Antiquarian', serif;">← Return to Gallery</button>
         <div id="flipbook"></div>
     </div>
 
     <script>
         const openSound = new Audio('open-book.mp3');
         let currentBg = 1;
+        let isEditMode = false;
 
-        // Added your 3rd Journal back here
         let myBooks = [
             { id: 1, title: "Daily Life", cover: "cover-1.jpg", pageColor: "#fffaf0" },
             { id: 2, title: "Art Spreads", cover: "cover-2.jpg", pageColor: "#fdf2f2" },
@@ -149,18 +187,25 @@
             shelf.innerHTML = ''; 
             myBooks.forEach(book => {
                 shelf.innerHTML += `
-                    <div class="journal-book" id="book-${book.id}" onclick="selectJournal(${book.id}, '${book.title}', '${book.pageColor}')">
-                        <div class="delete-btn" onclick="deleteJournal(event, ${book.id})">✕</div>
-                        <div class="rename-btn" onclick="renameJournal(event, ${book.id})">✎</div>
+                    <div class="journal-book ${isEditMode ? 'edit-mode' : ''}" id="book-${book.id}" onclick="selectJournal(${book.id}, '${book.title}', '${book.pageColor}')">
+                        <div class="delete-btn" onclick="deleteJournal(event, ${book.id}, '${book.title}')">✕</div>
+                        <div class="rename-btn" onclick="renameJournal(event, ${book.id})">🖋️</div>
                         <img src="${book.cover}" class="book-cover-img" onerror="this.src='https://via.placeholder.com/150x200?text=Cover'">
                         <div class="book-info">${book.title}</div>
+                        <div style="position:absolute; top:0; left:0; width:40px; height:40px; z-index:5;" onclick="toggleEditMode(event)"></div>
                     </div>
                 `;
             });
             shelf.innerHTML += `
-                <div class="journal-book" style="background: rgba(255,255,255,0.5); border:2px dashed #007aff; display:flex; align-items:center; justify-content:center;" onclick="addNewBook()">
-                    <span style="font-size:3rem; color:#007aff; font-weight:200;">+</span>
+                <div class="journal-book" style="background: rgba(255,255,255,0.3); border:2px dashed var(--ios-blue); display:flex; align-items:center; justify-content:center;" onclick="addNewBook()">
+                    <span style="font-size:3rem; color:var(--ios-blue); font-weight:200;">+</span>
                 </div>`;
+        }
+
+        function toggleEditMode(event) {
+            event.stopPropagation();
+            isEditMode = !isEditMode;
+            renderShelf();
         }
 
         function changeBackground() {
@@ -168,17 +213,20 @@
             document.getElementById('appBg').style.backgroundImage = `url('bg-${currentBg}.jpg')`;
         }
 
-        function deleteJournal(event, id) {
+        function deleteJournal(event, id, title) {
             event.stopPropagation();
-            if(confirm("Delete this journal permanently?")) {
+            // 1. CONFIRMATION WITH CUSTOM FONT FEEL
+            let confirmDel = confirm(`⚠️ ATTENTION ⚠️\n\nAre you sure you want to delete "${title.toUpperCase()}"?\n\nThis action is permanent.`);
+            if(confirmDel) {
                 myBooks = myBooks.filter(b => b.id !== id);
+                isEditMode = false;
                 renderShelf();
             }
         }
 
         function renameJournal(event, id) {
             event.stopPropagation();
-            let newName = prompt("Enter new journal name:");
+            let newName = prompt("Enter a new title for your masterpiece:");
             if (newName) {
                 const book = myBooks.find(b => b.id === id);
                 book.title = newName;
@@ -187,6 +235,7 @@
         }
 
         function selectJournal(id, title, color) {
+            if(isEditMode) return; // Prevent opening while in delete mode
             openSound.play().catch(e => console.log("Sound ready"));
             document.getElementById('bookInterior').style.display = 'flex';
         }
