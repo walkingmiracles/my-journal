@@ -3,29 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aesthetic Journal Library</title>
+    <title>Aesthetic Journal Gallery</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Niconne&family=Cormorant+Garamond:wght@700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
     
     <style>
         @font-face { font-family: 'Motherland'; src: url('motherland.ttf') format('truetype'); font-weight: bold; }
         @font-face { font-family: 'Antiquarian'; src: url('antiquarian.ttf') format('truetype'); font-weight: bold; }
 
         :root {
-            --ios-blur: blur(25px);
-            --ios-glass: rgba(255, 255, 255, 0.4);
-            --glow-pink: rgba(255, 182, 193, 0.8);
+            --ios-blur: blur(35px);
+            --ios-glass: rgba(255, 255, 255, 0.5);
+            --glow-pink: rgba(255, 105, 180, 0.95);
             --ios-text: #1d1d1f;
-            --ios-blue: #007aff;
-            --ios-red: #ff3b30;
+            --gold-leaf: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
         }
 
+        /* FAIRY CURSOR */
         body, html {
             margin: 0; padding: 0; height: 100%;
             font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-            -webkit-font-smoothing: antialiased;
-            overflow: hidden;
-            background-color: #f2f2f7;
+            overflow: hidden; background-color: #f2f2f7;
+            cursor: url('https://cur.cursors-4u.net/symbols/sym-9/sym833.cur'), auto !important;
         }
 
         .app-container {
@@ -36,103 +36,103 @@
             transition: background 1s ease-in-out;
         }
 
-        /* Background Switcher Button */
-        .bg-switcher {
-            position: absolute; top: 25px; right: 25px;
+        /* ENGRAVED UI ELEMENTS */
+        .bg-switcher, .back-btn {
             background: var(--ios-glass); backdrop-filter: var(--ios-blur);
-            padding: 12px 20px; border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.5);
-            font-weight: 600; color: var(--ios-text);
+            padding: 12px 25px; border-radius: 30px;
+            border: 1px solid rgba(255,255,255,0.7);
+            font-weight: 800; color: var(--ios-text);
             cursor: pointer; z-index: 50;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            background-image: url('https://www.transparenttextures.com/patterns/gray-floral.png');
         }
 
         .library-header h1 {
             font-family: 'Antiquarian', 'Italiana', serif;
-            font-weight: 800; color: var(--ios-text);
-            letter-spacing: -0.5px; margin-bottom: 50px;
-            font-size: 3rem; text-align: center;
+            font-weight: 800; font-size: 3.5rem; text-align: center;
+            background-image: url('https://www.transparenttextures.com/patterns/gray-floral.png');
+            padding: 20px 40px; border-radius: 20px;
         }
 
         .shelf-container {
-            width: 90%; max-width: 950px;
+            width: 90%; max-width: 1000px;
             background: var(--ios-glass); backdrop-filter: var(--ios-blur);
-            padding: 60px 40px; border-radius: 50px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-            gap: 45px; justify-items: center;
-            border: 1px solid rgba(255,255,255,0.5);
+            padding: 50px; border-radius: 60px;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 40px; border: 1px solid rgba(255,255,255,0.6);
         }
 
         .journal-book {
-            width: 170px; aspect-ratio: 3 / 4;
-            border-radius: 8px 24px 24px 8px;
-            cursor: pointer; position: relative;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            background: white;
+            width: 170px; aspect-ratio: 3/4; border-radius: 8px 24px 24px 8px;
+            position: relative; transition: 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+            background: white; box-shadow: 0 15px 35px rgba(0,0,0,0.1);
         }
 
-        .journal-book:hover, .journal-book.selected {
-            transform: scale(1.05) translateY(-8px);
-            box-shadow: 0 0 30px 5px var(--glow-pink);
+        .journal-book:hover {
+            transform: scale(1.1) translateY(-15px);
+            box-shadow: 0 0 60px 20px var(--glow-pink);
         }
 
         .book-cover-img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px 24px 24px 8px; }
 
         .book-info {
-            position: absolute; bottom: 15px; width: 88%; left: 6%;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 10px 0; text-align: center;
-            font-family: 'Motherland', 'Niconne', cursive;
-            font-weight: 700; font-size: 1.2rem; color: #000; 
-            border-radius: 12px;
+            position: absolute; bottom: 15px; width: 85%; left: 7.5%;
+            background: white; padding: 10px 0; text-align: center;
+            font-family: 'Motherland', cursive; font-weight: 800; border-radius: 12px;
         }
 
-        /* Action Buttons (Rename & Delete) */
-        .rename-btn, .delete-btn {
-            position: absolute; width: 32px; height: 32px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 14px; border: 2px solid white; opacity: 0; transition: 0.3s; z-index: 10;
-        }
-        .rename-btn { top: -12px; right: -12px; background: var(--ios-blue); color: white; }
-        .delete-btn { top: -12px; left: -12px; background: var(--ios-red); color: white; }
-        
-        .journal-book:hover .rename-btn, .journal-book:hover .delete-btn { opacity: 1; }
-
+        /* STAGE 2: THE INTERIOR OVERLAY */
         #bookInterior {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(255,255,255,0.2); backdrop-filter: blur(30px);
+            background: rgba(0,0,0,0.7); backdrop-filter: blur(20px);
             display: none; justify-content: center; align-items: center; z-index: 100;
         }
 
-        @media (max-width: 600px) {
-            .shelf-container { grid-template-columns: repeat(2, 1fr); padding: 30px 15px; }
-            .journal-book { width: 145px; }
-            .rename-btn, .delete-btn { opacity: 1; } /* Always show on mobile */
+        .flipbook-wrapper { width: 900px; height: 600px; position: relative; }
+
+        /* The Paper Styles */
+        .page {
+            padding: 40px; background-color: white;
+            box-shadow: inset 5px 0 15px rgba(0,0,0,0.05);
+            display: flex; flex-direction: column;
+            border: 1px solid #ddd;
+        }
+
+        .page-content {
+            height: 100%; width: 100%;
+            background-image: url('page-lined.png'); /* Your lined paper asset */
+            background-size: 100% 30px;
+            font-family: 'SF Pro Display', sans-serif;
+            font-size: 1.1rem; line-height: 30px; color: #333;
+        }
+
+        @media (max-width: 900px) {
+            .flipbook-wrapper { width: 100vw; height: 80vh; }
         }
     </style>
 </head>
 <body onload="initApp()">
 
     <div class="app-container" id="appBg">
-        <button class="bg-switcher" onclick="changeBackground()">Switch ✨</button>
-        
-        <div class="library-header">
-            <h1>My Journals</h1>
-        </div>
+        <button class="bg-switcher" style="position:absolute; top:20px; right:20px;" onclick="changeBackground()">Vibe Switch ✨</button>
+        <div class="library-header"><h1>My Journals</h1></div>
         <div class="shelf-container" id="shelf"></div>
     </div>
 
     <div id="bookInterior">
-        <button class="back-btn" onclick="closeBook()" style="position: absolute; top: 40px; left: 30px; background: var(--ios-blue); color: white; border: none; padding: 12px 24px; border-radius: 20px; font-weight: 600; cursor: pointer;">← Library</button>
-        <div id="flipbook"></div>
+        <button class="back-btn" style="position:absolute; top:30px; left:30px;" onclick="closeBook()">← Gallery</button>
+        <div class="flipbook-wrapper">
+            <div id="bookCanvas">
+                </div>
+        </div>
     </div>
 
     <script>
         const openSound = new Audio('open-book.mp3');
+        const flipSound = new Audio('flip.mp3');
         let currentBg = 1;
+        let pageFlip = null;
 
-        // Added your 3rd Journal back here
         let myBooks = [
             { id: 1, title: "Daily Life", cover: "cover-1.jpg", pageColor: "#fffaf0" },
             { id: 2, title: "Art Spreads", cover: "cover-2.jpg", pageColor: "#fdf2f2" },
@@ -149,56 +149,51 @@
             shelf.innerHTML = ''; 
             myBooks.forEach(book => {
                 shelf.innerHTML += `
-                    <div class="journal-book" id="book-${book.id}" onclick="selectJournal(${book.id}, '${book.title}', '${book.pageColor}')">
-                        <div class="delete-btn" onclick="deleteJournal(event, ${book.id})">✕</div>
-                        <div class="rename-btn" onclick="renameJournal(event, ${book.id})">✎</div>
-                        <img src="${book.cover}" class="book-cover-img" onerror="this.src='https://via.placeholder.com/150x200?text=Cover'">
+                    <div class="journal-book" onclick="openJournal(${book.id}, '${book.pageColor}')">
+                        <img src="${book.cover}" class="book-cover-img" onerror="this.src='https://via.placeholder.com/150x200'">
                         <div class="book-info">${book.title}</div>
                     </div>
                 `;
             });
-            shelf.innerHTML += `
-                <div class="journal-book" style="background: rgba(255,255,255,0.5); border:2px dashed #007aff; display:flex; align-items:center; justify-content:center;" onclick="addNewBook()">
-                    <span style="font-size:3rem; color:#007aff; font-weight:200;">+</span>
-                </div>`;
+        }
+
+        function openJournal(id, color) {
+            openSound.play();
+            document.getElementById('bookInterior').style.display = 'flex';
+            
+            const bookCanvas = document.getElementById('bookCanvas');
+            bookCanvas.innerHTML = ''; // Clear previous
+
+            // Create 6 Sample Pages
+            for(let i=1; i<=6; i++) {
+                const page = document.createElement('div');
+                page.className = 'page';
+                page.style.backgroundColor = color;
+                page.innerHTML = `<div class="page-content">Entry #${i}<br>Write your thoughts here...</div>`;
+                bookCanvas.appendChild(page);
+            }
+
+            // Initialize 3D Flip Engine
+            setTimeout(() => {
+                pageFlip = new St.PageFlip(bookCanvas, {
+                    width: 450, height: 600,
+                    showCover: true, mobileScrollSupport: false
+                });
+                pageFlip.loadFromHTML(document.querySelectorAll('.page'));
+                
+                // Play sound on flip
+                pageFlip.on('flip', (e) => { flipSound.play(); });
+            }, 100);
+        }
+
+        function closeBook() {
+            if(pageFlip) pageFlip.destroy();
+            document.getElementById('bookInterior').style.display = 'none';
         }
 
         function changeBackground() {
             currentBg = currentBg >= 3 ? 1 : currentBg + 1;
             document.getElementById('appBg').style.backgroundImage = `url('bg-${currentBg}.jpg')`;
-        }
-
-        function deleteJournal(event, id) {
-            event.stopPropagation();
-            if(confirm("Delete this journal permanently?")) {
-                myBooks = myBooks.filter(b => b.id !== id);
-                renderShelf();
-            }
-        }
-
-        function renameJournal(event, id) {
-            event.stopPropagation();
-            let newName = prompt("Enter new journal name:");
-            if (newName) {
-                const book = myBooks.find(b => b.id === id);
-                book.title = newName;
-                renderShelf();
-            }
-        }
-
-        function selectJournal(id, title, color) {
-            openSound.play().catch(e => console.log("Sound ready"));
-            document.getElementById('bookInterior').style.display = 'flex';
-        }
-
-        function closeBook() { document.getElementById('bookInterior').style.display = 'none'; }
-
-        function addNewBook() {
-            let name = prompt("Name your new journal:");
-            if(name) {
-                myBooks.push({ id: Date.now(), title: name, cover: "cover-1.jpg", pageColor: "#ffffff" });
-                renderShelf();
-            }
         }
     </script>
 </body>
