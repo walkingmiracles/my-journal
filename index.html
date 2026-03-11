@@ -3,162 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Aesthetic Library</title>
+    <title>Aesthetic Journal Library</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Niconne&family=Cormorant+Garamond:wght@700&display=swap" rel="stylesheet">
+    
     <style>
+        /* 1. UPLOAD YOUR FONT FILES TO GITHUB AND DEFINE THEM HERE */
+        @font-face {
+            font-family: 'Motherland';
+            src: url('motherland.ttf') format('truetype');
+            font-weight: bold;
+        }
+        @font-face {
+            font-family: 'Antiquarian';
+            src: url('antiquarian.ttf') format('truetype');
+            font-weight: bold;
+        }
+
         :root {
-            --shelf-color: rgba(255, 255, 255, 0.25);
-            --book-shadow: 0 8px 15px rgba(0,0,0,0.1);
+            --ios-blur: blur(25px);
+            --ios-glass: rgba(255, 255, 255, 0.4);
+            --glow-pink: rgba(255, 182, 193, 0.8);
+            --ios-text: #1d1d1f; /* Classic iPhone text color */
         }
 
         body, html {
             margin: 0; padding: 0; height: 100%;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
+            /* iOS San Francisco font stack */
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+            -webkit-font-smoothing: antialiased;
             overflow: hidden;
+            background-color: #f2f2f7; /* iOS background gray */
         }
 
         .app-container {
             width: 100%; height: 100vh;
             display: flex; flex-direction: column;
             align-items: center; justify-content: center;
-            background-size: cover;
-            background-position: center;
-            transition: background-image 0.8s ease-in-out;
+            background-size: cover; background-position: center;
+            transition: background 1s ease-in-out;
         }
 
-        .bg-changer {
-            position: absolute; top: 20px; right: 20px;
-            padding: 10px 15px; background: rgba(255,255,255,0.6);
-            backdrop-filter: blur(5px); border-radius: 30px;
-            cursor: pointer; border: none; font-size: 12px;
-            color: #555; letter-spacing: 1px; z-index: 10;
-        }
-
+        /* iOS Style Header: Bold & Clean */
         .library-header h1 {
-            font-weight: 200; color: #444; letter-spacing: 4px; margin-bottom: 40px;
+            font-family: 'Antiquarian', 'Italiana', serif;
+            font-weight: 800; /* Extra Bold */
+            color: var(--ios-text);
+            letter-spacing: -0.5px; /* iOS style tight tracking */
+            margin-bottom: 50px;
+            font-size: 3rem;
+            text-align: center;
         }
 
+        /* The Glass Shelf */
         .shelf-container {
-            width: 85%; max-width: 1000px;
-            background: var(--shelf-color);
-            backdrop-filter: blur(15px);
-            padding: 50px 30px; border-radius: 30px;
+            width: 90%; max-width: 950px;
+            background: var(--ios-glass);
+            backdrop-filter: var(--ios-blur);
+            -webkit-backdrop-filter: var(--ios-blur);
+            padding: 60px 40px; border-radius: 50px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 30px; justify-items: center;
-            border: 1px solid rgba(255,255,255,0.3);
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 45px; justify-items: center;
+            border: 1px solid rgba(255,255,255,0.5);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
         }
 
         .journal-book {
-            width: 150px; aspect-ratio: 3 / 4;
-            border-radius: 4px 12px 12px 4px;
-            box-shadow: var(--book-shadow); cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative; overflow: hidden;
-            background: white; /* Default fallback */
+            width: 170px; aspect-ratio: 3 / 4;
+            border-radius: 8px 24px 24px 8px; /* Smooth iOS-style curves */
+            cursor: pointer; position: relative;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            background: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
         }
 
-        .journal-book:hover {
-            transform: scale(1.05) translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        /* The Glow & Select Animation */
+        .journal-book:hover, .journal-book.selected {
+            transform: scale(1.05) translateY(-8px);
+            box-shadow: 0 0 30px 5px var(--glow-pink);
         }
 
         .book-cover-img {
             width: 100%; height: 100%; object-fit: cover;
-            position: absolute; top: 0; left: 0;
-            opacity: 0.9; /* Lets the page color peek through slightly if image has transparency */
+            border-radius: 8px 24px 24px 8px;
         }
 
+        /* Journal Labels: Bold and Easy to Read */
         .book-info {
-            position: absolute; bottom: 0; width: 100%;
-            background: rgba(255,255,255,0.9);
-            padding: 8px 0; text-align: center;
-            font-size: 0.8rem; color: #333; z-index: 2;
+            position: absolute; bottom: 15px; width: 88%; left: 6%;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 10px 0; text-align: center;
+            font-family: 'Motherland', 'Niconne', cursive;
+            font-weight: 700; /* Bold */
+            font-size: 1.2rem; color: #000; 
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
         }
 
-        /* Small indicator for the page color */
-        .page-color-preview {
-            position: absolute; top: 10px; right: 10px;
-            width: 12px; height: 12px; border-radius: 50%;
-            border: 1px solid rgba(0,0,0,0.1); z-index: 3;
+        /* iOS Style Rename Button */
+        .rename-btn {
+            position: absolute; top: -12px; right: -12px;
+            background: #007aff; /* iOS Blue */
+            color: white; border-radius: 50%; width: 32px; height: 32px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px; border: 2px solid white; 
+            opacity: 0; transition: 0.3s; z-index: 10;
+        }
+        .journal-book:hover .rename-btn { opacity: 1; }
+
+        /* Interior Overlay */
+        #bookInterior {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.2); backdrop-filter: blur(30px);
+            display: none; justify-content: center; align-items: center;
+            z-index: 100;
+        }
+
+        .back-btn {
+            position: absolute; top: 40px; left: 30px;
+            background: #007aff; color: white; border: none;
+            padding: 12px 24px; border-radius: 20px; font-weight: 600;
+            cursor: pointer; z-index: 110; box-shadow: 0 4px 12px rgba(0,122,255,0.3);
         }
 
         @media (max-width: 600px) {
             .shelf-container { grid-template-columns: repeat(2, 1fr); padding: 30px 15px; }
-            .journal-book { width: 130px; }
+            .journal-book { width: 145px; }
+            .library-header h1 { font-size: 2.2rem; }
         }
     </style>
 </head>
 <body onload="initApp()">
 
     <div class="app-container" id="appBg">
-        <button class="bg-changer" onclick="changeBackground()">Change Vibe ✨</button>
-
         <div class="library-header">
-            <h1>JOURNALS</h1>
+            <h1>My Journals</h1>
         </div>
-
         <div class="shelf-container" id="shelf"></div>
     </div>
 
+    <div id="bookInterior">
+        <button class="back-btn" onclick="closeBook()">← Library</button>
+        <div id="flipbook"></div>
+    </div>
+
     <script>
-        let currentBgIndex = 1;
-        
-        // Added 'pageColor' property to each book
-        const myBooks = [
-            { id: 1, title: "Daily Thoughts", cover: "cover-1.jpg", pageType: "lined", pageColor: "#fffaf0" }, // Floral White
-            { id: 2, title: "Art Sketches", cover: "cover-2.jpg", pageType: "blank", pageColor: "#fdf2f2" }, // Soft Pink
-            { id: 3, title: "Vibe Notes", cover: "cover-3.jpg", pageType: "grid", pageColor: "#f0f9ff" }    // Soft Blue
+        const openSound = new Audio('open-book.mp3');
+
+        let myBooks = [
+            { id: 1, title: "Daily Life", cover: "cover-1.jpg", pageColor: "#fffaf0" },
+            { id: 2, title: "Art Spreads", cover: "cover-2.jpg", pageColor: "#fdf2f2" }
         ];
 
         function initApp() {
-            document.getElementById('appBg').style.backgroundImage = "url('bg-1.jpg')";
+            // Check for bg-1.jpg, if fails, use a nice gradient
+            const container = document.getElementById('appBg');
+            container.style.backgroundImage = "url('bg-1.jpg')";
             renderShelf();
         }
 
         function renderShelf() {
             const shelf = document.getElementById('shelf');
             shelf.innerHTML = ''; 
-            
             myBooks.forEach(book => {
                 shelf.innerHTML += `
-                    <div class="journal-book" style="background-color: ${book.pageColor}" onclick="openBook('${book.title}', '${book.pageType}', '${book.pageColor}')">
-                        <img src="${book.cover}" class="book-cover-img" onerror="this.style.display='none'">
-                        <div class="page-color-preview" style="background-color: ${book.pageColor}"></div>
+                    <div class="journal-book" id="book-${book.id}" onclick="selectJournal(${book.id}, '${book.title}', '${book.pageColor}')">
+                        <div class="rename-btn" onclick="renameJournal(event, ${book.id})">✎</div>
+                        <img src="${book.cover}" class="book-cover-img" onerror="this.src='https://via.placeholder.com/150x200?text=Cover'">
                         <div class="book-info">${book.title}</div>
                     </div>
                 `;
             });
-
+            // iOS Style Add Button
             shelf.innerHTML += `
-                <div class="journal-book" style="border: 2px dashed #999; background: none; display:flex; align-items:center; justify-content:center;" onclick="addNewBook()">
-                    <span style="font-size: 2rem; color: #999;">+</span>
-                </div>
-            `;
+                <div class="journal-book" style="background: rgba(255,255,255,0.5); border:2px dashed #007aff; display:flex; align-items:center; justify-content:center;" onclick="addNewBook()">
+                    <span style="font-size:3rem; color:#007aff; font-weight:200;">+</span>
+                </div>`;
         }
 
-        function changeBackground() {
-            currentBgIndex = currentBgIndex >= 3 ? 1 : currentBgIndex + 1;
-            document.getElementById('appBg').style.backgroundImage = `url('bg-${currentBgIndex}.jpg')`;
+        function renameJournal(event, id) {
+            event.stopPropagation();
+            let newName = prompt("Enter new journal name:");
+            if (newName) {
+                const book = myBooks.find(b => b.id === id);
+                book.title = newName;
+                renderShelf();
+            }
         }
 
-        function openBook(title, type, color) {
-            alert(`Opening "${title}"\nPage Color: ${color}\nPage Type: ${type}`);
-            // In the next stage, this 'color' variable will be used to tint the flipbook pages!
+        function selectJournal(id, title, color) {
+            document.querySelectorAll('.journal-book').forEach(b => b.classList.remove('selected'));
+            document.getElementById(`book-${id}`).classList.add('selected');
+            
+            // Play Sound
+            openSound.play().catch(e => console.log("Sound ready after user interaction"));
+
+            setTimeout(() => {
+                document.getElementById('bookInterior').style.display = 'flex';
+                // Here is where Stage 2 flipbook will render
+                console.log(`Opening: ${title}`);
+            }, 400);
+        }
+
+        function closeBook() {
+            document.getElementById('bookInterior').style.display = 'none';
         }
 
         function addNewBook() {
             let name = prompt("Name your new journal:");
             if(name) {
-                let color = prompt("Enter a page color (e.g., #ffe4e1 for Misty Rose, #f0fff0 for Honeydew, or just 'white'):", "#ffffff");
-                let type = prompt("Choose page type (lined, blank, grid):", "lined");
-                
-                myBooks.push({ 
-                    id: myBooks.length + 1, 
-                    title: name, 
-                    cover: "cover-1.jpg", 
-                    pageType: type, 
-                    pageColor: color || "#ffffff" 
-                });
+                myBooks.push({ id: Date.now(), title: name, cover: "cover-1.jpg", pageColor: "#ffffff" });
                 renderShelf();
             }
         }
