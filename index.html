@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Aesthetic Library</title>
+    <style>
+        :root {
+            --shelf-color: rgba(255, 255, 255, 0.25);
+            --book-shadow: 0 8px 15px rgba(0,0,0,0.1);
+        }
+
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        .app-container {
+            width: 100%; height: 100vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            background-size: cover;
+            background-position: center;
+            transition: background-image 0.8s ease-in-out;
+        }
+
+        .bg-changer {
+            position: absolute; top: 20px; right: 20px;
+            padding: 10px 15px; background: rgba(255,255,255,0.6);
+            backdrop-filter: blur(5px); border-radius: 30px;
+            cursor: pointer; border: none; font-size: 12px;
+            color: #555; letter-spacing: 1px; z-index: 10;
+        }
+
+        .library-header h1 {
+            font-weight: 200; color: #444; letter-spacing: 4px; margin-bottom: 40px;
+        }
+
+        .shelf-container {
+            width: 85%; max-width: 1000px;
+            background: var(--shelf-color);
+            backdrop-filter: blur(15px);
+            padding: 50px 30px; border-radius: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 30px; justify-items: center;
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .journal-book {
+            width: 150px; aspect-ratio: 3 / 4;
+            border-radius: 4px 12px 12px 4px;
+            box-shadow: var(--book-shadow); cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative; overflow: hidden;
+            background: white; /* Default fallback */
+        }
+
+        .journal-book:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .book-cover-img {
+            width: 100%; height: 100%; object-fit: cover;
+            position: absolute; top: 0; left: 0;
+            opacity: 0.9; /* Lets the page color peek through slightly if image has transparency */
+        }
+
+        .book-info {
+            position: absolute; bottom: 0; width: 100%;
+            background: rgba(255,255,255,0.9);
+            padding: 8px 0; text-align: center;
+            font-size: 0.8rem; color: #333; z-index: 2;
+        }
+
+        /* Small indicator for the page color */
+        .page-color-preview {
+            position: absolute; top: 10px; right: 10px;
+            width: 12px; height: 12px; border-radius: 50%;
+            border: 1px solid rgba(0,0,0,0.1); z-index: 3;
+        }
+
+        @media (max-width: 600px) {
+            .shelf-container { grid-template-columns: repeat(2, 1fr); padding: 30px 15px; }
+            .journal-book { width: 130px; }
+        }
+    </style>
+</head>
+<body onload="initApp()">
+
+    <div class="app-container" id="appBg">
+        <button class="bg-changer" onclick="changeBackground()">Change Vibe ✨</button>
+
+        <div class="library-header">
+            <h1>JOURNALS</h1>
+        </div>
+
+        <div class="shelf-container" id="shelf"></div>
+    </div>
+
+    <script>
+        let currentBgIndex = 1;
+        
+        // Added 'pageColor' property to each book
+        const myBooks = [
+            { id: 1, title: "Daily Thoughts", cover: "cover-1.jpg", pageType: "lined", pageColor: "#fffaf0" }, // Floral White
+            { id: 2, title: "Art Sketches", cover: "cover-2.jpg", pageType: "blank", pageColor: "#fdf2f2" }, // Soft Pink
+            { id: 3, title: "Vibe Notes", cover: "cover-3.jpg", pageType: "grid", pageColor: "#f0f9ff" }    // Soft Blue
+        ];
+
+        function initApp() {
+            document.getElementById('appBg').style.backgroundImage = "url('bg-1.jpg')";
+            renderShelf();
+        }
+
+        function renderShelf() {
+            const shelf = document.getElementById('shelf');
+            shelf.innerHTML = ''; 
+            
+            myBooks.forEach(book => {
+                shelf.innerHTML += `
+                    <div class="journal-book" style="background-color: ${book.pageColor}" onclick="openBook('${book.title}', '${book.pageType}', '${book.pageColor}')">
+                        <img src="${book.cover}" class="book-cover-img" onerror="this.style.display='none'">
+                        <div class="page-color-preview" style="background-color: ${book.pageColor}"></div>
+                        <div class="book-info">${book.title}</div>
+                    </div>
+                `;
+            });
+
+            shelf.innerHTML += `
+                <div class="journal-book" style="border: 2px dashed #999; background: none; display:flex; align-items:center; justify-content:center;" onclick="addNewBook()">
+                    <span style="font-size: 2rem; color: #999;">+</span>
+                </div>
+            `;
+        }
+
+        function changeBackground() {
+            currentBgIndex = currentBgIndex >= 3 ? 1 : currentBgIndex + 1;
+            document.getElementById('appBg').style.backgroundImage = `url('bg-${currentBgIndex}.jpg')`;
+        }
+
+        function openBook(title, type, color) {
+            alert(`Opening "${title}"\nPage Color: ${color}\nPage Type: ${type}`);
+            // In the next stage, this 'color' variable will be used to tint the flipbook pages!
+        }
+
+        function addNewBook() {
+            let name = prompt("Name your new journal:");
+            if(name) {
+                let color = prompt("Enter a page color (e.g., #ffe4e1 for Misty Rose, #f0fff0 for Honeydew, or just 'white'):", "#ffffff");
+                let type = prompt("Choose page type (lined, blank, grid):", "lined");
+                
+                myBooks.push({ 
+                    id: myBooks.length + 1, 
+                    title: name, 
+                    cover: "cover-1.jpg", 
+                    pageType: type, 
+                    pageColor: color || "#ffffff" 
+                });
+                renderShelf();
+            }
+        }
+    </script>
+</body>
+</html>
