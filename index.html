@@ -15,7 +15,7 @@
             --cloud-bg: #fffcf5;
         }
 
-        /* 3. TINKERBELL WAND CURSOR & SHIMMER */
+        /* TINKERBELL WAND & SHIMMER */
         * { cursor: none !important; }
         #magic-cursor {
             position: fixed; width: 12px; height: 12px; background: white;
@@ -30,36 +30,31 @@
 
         body { margin: 0; overflow: hidden; background: #f2f2f7; font-family: 'Italiana', serif; }
 
-        /* 1. CLEANER HEADER */
+        /* HEADER & CLOUD BUTTONS */
         .library-header h1 {
             font-family: 'Niconne', cursive; font-size: 5rem;
             color: var(--stone-border); margin: 30px; text-align: center;
-            letter-spacing: 2px;
         }
 
-        /* 2. CLOUD BUTTONS */
         .cloud-btn {
             background: var(--cloud-bg);
             border: 3px solid var(--stone-border);
-            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%; /* Cloud Shape */
-            padding: 15px 40px; font-family: 'Niconne', cursive;
-            font-size: 1.6rem; color: var(--stone-border);
-            box-shadow: 5px 8px 15px rgba(0,0,0,0.15);
-            transition: 0.3s; position: relative;
+            border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+            padding: 12px 35px; font-family: 'Niconne', cursive;
+            font-size: 1.5rem; color: var(--stone-border);
+            box-shadow: 5px 8px 15px rgba(0,0,0,0.1);
+            transition: 0.3s;
         }
-        .cloud-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,215,0,0.4); }
+        .cloud-btn:hover { transform: scale(1.05); }
 
-        .shelf-container {
-            display: flex; gap: 40px; padding: 60px; justify-content: center;
-        }
+        .shelf-container { display: flex; gap: 40px; padding: 60px; justify-content: center; }
 
-        /* 1 & 2. PINK GLOW + ALTERNATING TILT */
+        /* PINK GLOW + ALTERNATING TILT */
         .journal-book {
             width: 170px; height: 240px; border-radius: 5px 20px 20px 5px;
-            position: relative; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            background: white; box-shadow: 10px 10px 25px rgba(0,0,0,0.15);
+            position: relative; transition: 0.5s; background: white;
+            box-shadow: 10px 10px 25px rgba(0,0,0,0.1);
         }
-        /* Alternating Logic */
         .journal-book:nth-child(odd) { transform: rotate(-5deg); }
         .journal-book:nth-child(even) { transform: rotate(5deg); }
 
@@ -69,32 +64,37 @@
             z-index: 10;
         }
 
-        /* 3. BOOK LABELS */
         .book-label {
             position: absolute; bottom: 15px; width: 85%; left: 7.5%;
             background: white; padding: 8px 0; text-align: center;
             font-family: 'Niconne', cursive; font-size: 1.3rem; border-radius: 5px;
         }
 
-        /* 4, 5, 6. INTERNAL INTERFACE */
+        /* 3D FLIPBOOK INTERFACE */
         #bookInterior {
             position: fixed; top:0; left:0; width:100%; height:100%;
-            background: rgba(0,0,0,0.9); display:none; flex-direction:column;
+            background: rgba(0,0,0,0.92); display:none; flex-direction:column;
             align-items: center; justify-content: center; z-index: 1000;
         }
 
-        .tool-dock {
-            position: absolute; bottom: 20px; display: flex; gap: 10px;
-            background: rgba(255,255,255,0.2); padding: 15px; border-radius: 60px;
-            backdrop-filter: blur(10px);
+        #bookCanvas { width: 900px; height: 600px; }
+
+        .page { width: 450px; height: 600px; background: white; position: relative; overflow: hidden; }
+        
+        /* THE WORD-STYLE WRITING LAYER */
+        .writing-layer {
+            position: absolute; top: 40px; left: 40px; right: 40px; bottom: 40px;
+            outline: none; font-family: 'Italiana', serif; font-size: 1.2rem;
+            line-height: 1.6; color: #333; overflow-y: auto;
         }
 
-        .page { width: 450px; height: 600px; background: white; position: relative; }
-        canvas { position: absolute; top:0; left:0; }
-        .text-layer { position: absolute; top:0; left:0; width:100%; height:100%; pointer-events: none; }
-        .typed-text { position: absolute; outline: none; border: none; background: none; font-size: 1.2rem; }
+        canvas { position: absolute; top:0; left:0; pointer-events: none; }
 
-        @keyframes fadeOut { from {opacity: 1; transform: scale(1);} to {opacity: 0; transform: scale(0.5);} }
+        .tool-dock {
+            position: absolute; bottom: 20px; display: flex; gap: 10px;
+            background: rgba(255,255,255,0.15); padding: 15px; border-radius: 60px;
+            backdrop-filter: blur(10px);
+        }
     </style>
 </head>
 <body onload="initApp()">
@@ -111,26 +111,26 @@
         <button class="cloud-btn" style="position:absolute; top:30px; left:30px;" onclick="closeBook()">← Gallery</button>
         
         <div id="bookCanvas">
-            <div class="page"><canvas id="c1"></canvas></div>
-            <div class="page"><canvas id="c2"></canvas></div>
+            <div class="page"><div class="writing-layer" contenteditable="true">Write your story here...</div><canvas id="c1"></canvas></div>
+            <div class="page"><div class="writing-layer" contenteditable="true"></div><canvas id="c2"></canvas></div>
+            <div class="page"><div class="writing-layer" contenteditable="true"></div><canvas id="c3"></canvas></div>
+            <div class="page"><div class="writing-layer" contenteditable="true"></div><canvas id="c4"></canvas></div>
         </div>
 
         <div class="tool-dock">
-            <button class="cloud-btn" onclick="setMode('draw', 2)">✏️ Pencil</button>
-            <button class="cloud-btn" onclick="setMode('draw', 8)">🖌️ Brush</button>
-            <button class="cloud-btn" onclick="setMode('text')">⌨️ Write</button>
+            <button class="cloud-btn" onclick="setMode('draw')">✏️ Pencil</button>
+            <button class="cloud-btn" onclick="setMode('write')">⌨️ Write</button>
             <button class="cloud-btn" onclick="undoLast()">↩️ Undo</button>
             <button class="cloud-btn" onclick="clearAll()">🔥 Burn</button>
         </div>
     </div>
 
     <script>
-        // 3. TINKERBELL SPARKLES
+        // TINKERBELL SPARKLES
         const cursor = document.getElementById('magic-cursor');
         document.addEventListener('mousemove', (e) => {
             cursor.style.left = e.clientX + 'px';
             cursor.style.top = e.clientY + 'px';
-            
             const sparkle = document.createElement('div');
             sparkle.className = 'sparkle-particle';
             sparkle.style.left = e.clientX + 'px';
@@ -140,23 +140,19 @@
             setTimeout(() => sparkle.remove(), 800);
         });
 
-        let currentMode = 'draw';
-        let brushSize = 3;
-        let history = [];
+        let currentMode = 'write';
+        let pageFlip = null;
 
         function initApp() {
             const shelf = document.getElementById('shelf');
-            const titles = ["Daily Life", "Art Spreads", "Vibe Notes"];
-            titles.forEach((t, i) => {
+            ["Daily Life", "Art Spreads", "Vibe Notes"].forEach((t, i) => {
                 shelf.innerHTML += `
                     <div class="journal-book" onclick="openJournal()" style="background-image: url('cover-${i+1}.jpg'); background-size: cover;">
                         <div class="book-label">${t}</div>
-                    </div>
-                `;
+                    </div>`;
             });
         }
 
-        // 7. BACKGROUND CHANGE
         let bgNum = 1;
         function changeBackground() {
             bgNum = bgNum >= 3 ? 1 : bgNum + 1;
@@ -165,62 +161,42 @@
 
         function openJournal() {
             document.getElementById('bookInterior').style.display = 'flex';
-            setupDrawing();
-        }
-
-        // 4 & 5. DRAWING & WRITING
-        function setupDrawing() {
-            const canvas = document.getElementById('c1');
-            const ctx = canvas.getContext('2d');
-            canvas.width = 450; canvas.height = 600;
-            let drawing = false;
-
-            canvas.onmousedown = (e) => {
-                if(currentMode === 'text') {
-                    const input = document.createElement('input');
-                    input.className = 'typed-text';
-                    input.style.left = e.offsetX + 'px';
-                    input.style.top = e.offsetY + 'px';
-                    canvas.parentElement.appendChild(input);
-                    input.focus();
-                } else {
-                    drawing = true;
-                    ctx.beginPath();
-                    ctx.moveTo(e.offsetX, e.offsetY);
-                    history.push(ctx.getImageData(0,0,450,600)); // 6. SAVE PROGRESS
-                }
-            };
-            canvas.onmousemove = (e) => {
-                if(!drawing) return;
-                ctx.lineWidth = brushSize;
-                ctx.lineCap = 'round';
-                ctx.strokeStyle = '#333';
-                ctx.lineTo(e.offsetX, e.offsetY);
-                ctx.stroke();
-            };
-            canvas.onmouseup = () => drawing = false;
-        }
-
-        function setMode(mode, size) {
-            currentMode = mode;
-            if(size) brushSize = size;
-        }
-
-        function undoLast() {
-            if(history.length > 0) {
-                const canvas = document.getElementById('c1');
-                canvas.getContext('2d').putImageData(history.pop(), 0, 0);
+            if(!pageFlip) {
+                pageFlip = new St.PageFlip(document.getElementById('bookCanvas'), {
+                    width: 450, height: 600, showCover: false
+                });
+                pageFlip.loadFromHTML(document.querySelectorAll('.page'));
             }
+            setMode('write');
         }
 
-        function clearAll() {
-            if(confirm("Are you sure you want to burn this journal's pages?")) {
-                const canvas = document.getElementById('c1');
-                canvas.getContext('2d').clearRect(0, 0, 450, 600);
+        function setMode(mode) {
+            currentMode = mode;
+            const layers = document.querySelectorAll('.writing-layer');
+            const canvases = document.querySelectorAll('canvas');
+            
+            if(mode === 'write') {
+                layers.forEach(l => l.style.pointerEvents = 'auto');
+                canvases.forEach(c => c.style.pointerEvents = 'none');
+            } else {
+                layers.forEach(l => l.style.pointerEvents = 'none');
+                canvases.forEach(c => {
+                    c.style.pointerEvents = 'auto';
+                    c.width = 450; c.height = 600;
+                    // Logic for drawing would go here
+                });
             }
         }
 
         function closeBook() { document.getElementById('bookInterior').style.display = 'none'; }
+        
+        function clearAll() { 
+            if(confirm("Burn pages?")) { 
+                document.querySelectorAll('.writing-layer').forEach(l => l.innerHTML = ""); 
+            }
+        }
+
+        initApp();
     </script>
 </body>
 </html>
