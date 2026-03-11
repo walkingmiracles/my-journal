@@ -3,198 +3,199 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aesthetic Journal Gallery</title>
+    <title>The Grand Journal Gallery</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Niconne&family=Cormorant+Garamond:wght@700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Niconne&family=Italiana&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/page-flip/dist/js/page-flip.browser.min.js"></script>
-    
+
     <style>
-        @font-face { font-family: 'Motherland'; src: url('motherland.ttf') format('truetype'); font-weight: bold; }
-        @font-face { font-family: 'Antiquarian'; src: url('antiquarian.ttf') format('truetype'); font-weight: bold; }
+        @font-face { font-family: 'Motherland'; src: url('motherland.ttf') format('truetype'); }
 
         :root {
-            --ios-blur: blur(35px);
-            --ios-glass: rgba(255, 255, 255, 0.5);
-            --glow-pink: rgba(255, 105, 180, 0.95);
-            --ios-text: #1d1d1f;
-            --gold-leaf: linear-gradient(135deg, #bf953f, #fcf6ba, #b38728, #fbf5b7, #aa771c);
+            --engraved-bg: #fffcf5;
+            --stone-border: #4a4238;
+            --gold-glow: 0 0 20px 5px rgba(255, 215, 0, 0.6);
+            --fairy-pink: rgba(255, 105, 180, 0.9);
         }
 
-        /* FAIRY CURSOR */
-        body, html {
-            margin: 0; padding: 0; height: 100%;
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
-            overflow: hidden; background-color: #f2f2f7;
+        /* 5. GLOWING FAIRY WAND CURSOR */
+        body {
+            margin: 0; overflow: hidden; background: #f2f2f7;
+            font-family: 'Italiana', serif;
             cursor: url('https://cur.cursors-4u.net/symbols/sym-9/sym833.cur'), auto !important;
         }
 
-        .app-container {
-            width: 100%; height: 100vh;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            background-size: cover; background-position: center;
-            transition: background 1s ease-in-out;
-        }
-
-        /* ENGRAVED UI ELEMENTS */
-        .bg-switcher, .back-btn {
-            background: var(--ios-glass); backdrop-filter: var(--ios-blur);
-            padding: 12px 25px; border-radius: 30px;
-            border: 1px solid rgba(255,255,255,0.7);
-            font-weight: 800; color: var(--ios-text);
-            cursor: pointer; z-index: 50;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            background-image: url('https://www.transparenttextures.com/patterns/gray-floral.png');
+        /* 2. ENGRAVED FRAME BUTTONS */
+        .engraved-ui {
+            background: var(--engraved-bg);
+            border: 4px solid var(--stone-border);
+            border-image: url('https://www.transparenttextures.com/patterns/dark-wood.png') 30 round;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.2), 5px 5px 15px rgba(0,0,0,0.3);
+            font-family: 'Niconne', cursive;
+            font-weight: bold; font-size: 1.5rem;
+            padding: 10px 30px; border-radius: 5px;
+            color: var(--stone-border); cursor: pointer;
         }
 
         .library-header h1 {
-            font-family: 'Antiquarian', 'Italiana', serif;
-            font-weight: 800; font-size: 3.5rem; text-align: center;
-            background-image: url('https://www.transparenttextures.com/patterns/gray-floral.png');
-            padding: 20px 40px; border-radius: 20px;
+            font-family: 'Niconne', cursive; font-size: 4rem;
+            color: var(--stone-border); text-shadow: 2px 2px 0px #fff;
+            margin: 20px;
         }
 
         .shelf-container {
-            width: 90%; max-width: 1000px;
-            background: var(--ios-glass); backdrop-filter: var(--ios-blur);
-            padding: 50px; border-radius: 60px;
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-            gap: 40px; border: 1px solid rgba(255,255,255,0.6);
+            display: flex; gap: 50px; padding: 60px;
+            background: rgba(255,255,255,0.2); backdrop-filter: blur(20px);
+            border-radius: 80px; border: 2px solid var(--stone-border);
         }
 
         .journal-book {
-            width: 170px; aspect-ratio: 3/4; border-radius: 8px 24px 24px 8px;
-            position: relative; transition: 0.5s cubic-bezier(0.2, 1, 0.3, 1);
-            background: white; box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 180px; height: 250px; border-radius: 5px 20px 20px 5px;
+            position: relative; transition: 0.4s;
+            box-shadow: 10px 10px 20px rgba(0,0,0,0.2);
         }
 
+        /* 2. HYPER PINK GLOW */
         .journal-book:hover {
-            transform: scale(1.1) translateY(-15px);
-            box-shadow: 0 0 60px 20px var(--glow-pink);
+            transform: scale(1.1) rotate(-3deg);
+            box-shadow: 0 0 60px 20px var(--fairy-pink), 0 0 100px 40px rgba(255,105,180,0.3);
         }
 
-        .book-cover-img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px 24px 24px 8px; }
-
-        .book-info {
-            position: absolute; bottom: 15px; width: 85%; left: 7.5%;
-            background: white; padding: 10px 0; text-align: center;
-            font-family: 'Motherland', cursive; font-weight: 800; border-radius: 12px;
-        }
-
-        /* STAGE 2: THE INTERIOR OVERLAY */
+        /* 7, 8, 9, 10. INTERNAL PAGE TOOLS */
         #bookInterior {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.7); backdrop-filter: blur(20px);
-            display: none; justify-content: center; align-items: center; z-index: 100;
+            position: fixed; top:0; left:0; width:100%; height:100%;
+            background: rgba(0,0,0,0.85); display:none; flex-direction:column;
+            align-items: center; justify-content: center; z-index: 1000;
         }
 
-        .flipbook-wrapper { width: 900px; height: 600px; position: relative; }
+        .tool-dock {
+            position: absolute; bottom: 30px; display: flex; gap: 15px;
+            background: var(--engraved-bg); padding: 15px; border-radius: 50px;
+            border: 3px solid var(--stone-border);
+        }
 
-        /* The Paper Styles */
+        .flip-container { width: 900px; height: 600px; }
+
         .page {
-            padding: 40px; background-color: white;
-            box-shadow: inset 5px 0 15px rgba(0,0,0,0.05);
-            display: flex; flex-direction: column;
-            border: 1px solid #ddd;
+            width: 450px; height: 600px; background: white;
+            border: 1px solid #ddd; position: relative;
         }
 
-        .page-content {
-            height: 100%; width: 100%;
-            background-image: url('page-lined.png'); /* Your lined paper asset */
-            background-size: 100% 30px;
-            font-family: 'SF Pro Display', sans-serif;
-            font-size: 1.1rem; line-height: 30px; color: #333;
-        }
+        canvas { position: absolute; top:0; left:0; pointer-events: auto; }
 
-        @media (max-width: 900px) {
-            .flipbook-wrapper { width: 100vw; height: 80vh; }
+        .sparkle {
+            position: absolute; width: 10px; height: 10px;
+            background: white; border-radius: 50%; pointer-events: none;
+            box-shadow: 0 0 10px gold; z-index: 9999;
         }
     </style>
 </head>
-<body onload="initApp()">
+<body>
 
-    <div class="app-container" id="appBg">
-        <button class="bg-switcher" style="position:absolute; top:20px; right:20px;" onclick="changeBackground()">Vibe Switch ✨</button>
+    <div class="app-container" id="appBg" style="background-image: url('bg-1.jpg'); background-size: cover; height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+        <button class="engraved-ui" style="position:absolute; top:30px; right:30px;" onclick="changeBackground()">Vibe Switch ✨</button>
         <div class="library-header"><h1>My Journals</h1></div>
         <div class="shelf-container" id="shelf"></div>
     </div>
 
     <div id="bookInterior">
-        <button class="back-btn" style="position:absolute; top:30px; left:30px;" onclick="closeBook()">← Gallery</button>
-        <div class="flipbook-wrapper">
+        <button class="engraved-ui" style="position:absolute; top:30px; left:30px;" onclick="closeBook()">← Gallery</button>
+        
+        <div class="flip-container" id="flipContainer">
             <div id="bookCanvas">
-                </div>
+                <div class="page" id="p1"><canvas id="c1"></canvas></div>
+                <div class="page" id="p2"><canvas id="c2"></canvas></div>
+                <div class="page" id="p3"><canvas id="c3"></canvas></div>
+                <div class="page" id="p4"><canvas id="c4"></canvas></div>
+            </div>
+        </div>
+
+        <div class="tool-dock">
+            <button class="engraved-ui" onclick="setMode('draw')">🖋️ Pen</button>
+            <button class="engraved-ui" onclick="setMode('text')">⌨️ Write</button>
+            <button class="engraved-ui" onclick="document.getElementById('imgInput').click()">🖼️ Pic</button>
+            <button class="engraved-ui" onclick="addSticker()">⭐ Sticker</button>
+            <select class="engraved-ui" onchange="setPaper(this.value)">
+                <option value="blank">Blank</option>
+                <option value="lined">Lined</option>
+                <option value="grid">Grid</option>
+            </select>
+            <input type="file" id="imgInput" hidden onchange="handleImage(event)">
         </div>
     </div>
 
     <script>
         const openSound = new Audio('open-book.mp3');
         const flipSound = new Audio('flip.mp3');
-        let currentBg = 1;
-        let pageFlip = null;
+        let currentMode = 'draw';
 
-        let myBooks = [
-            { id: 1, title: "Daily Life", cover: "cover-1.jpg", pageColor: "#fffaf0" },
-            { id: 2, title: "Art Spreads", cover: "cover-2.jpg", pageColor: "#fdf2f2" },
-            { id: 3, title: "Vibe Notes", cover: "cover-3.jpg", pageColor: "#f0f9ff" }
+        // 5. FAIRY SPARKLE TRAIL
+        document.addEventListener('mousemove', (e) => {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = e.pageX + 'px';
+            sparkle.style.top = e.pageY + 'px';
+            document.body.appendChild(sparkle);
+            setTimeout(() => sparkle.remove(), 800);
+        });
+
+        const myBooks = [
+            { id: 1, title: "Daily Life", cover: "cover-1.jpg" },
+            { id: 2, title: "Art Spreads", cover: "cover-2.jpg" },
+            { id: 3, title: "Vibe Notes", cover: "cover-3.jpg" }
         ];
-
-        function initApp() {
-            document.getElementById('appBg').style.backgroundImage = "url('bg-1.jpg')";
-            renderShelf();
-        }
 
         function renderShelf() {
             const shelf = document.getElementById('shelf');
-            shelf.innerHTML = ''; 
             myBooks.forEach(book => {
-                shelf.innerHTML += `
-                    <div class="journal-book" onclick="openJournal(${book.id}, '${book.pageColor}')">
-                        <img src="${book.cover}" class="book-cover-img" onerror="this.src='https://via.placeholder.com/150x200'">
-                        <div class="book-info">${book.title}</div>
-                    </div>
-                `;
+                const b = document.createElement('div');
+                b.className = 'journal-book';
+                b.style.backgroundImage = `url(${book.cover})`;
+                b.style.backgroundSize = 'cover';
+                b.onclick = () => openJournal();
+                b.innerHTML = `<div style="position:absolute; bottom:10px; width:100%; text-align:center; background:white; font-family:'Niconne';">${book.title}</div>`;
+                shelf.appendChild(b);
             });
         }
 
-        function openJournal(id, color) {
+        function openJournal() {
             openSound.play();
             document.getElementById('bookInterior').style.display = 'flex';
+            const pageFlip = new St.PageFlip(document.getElementById('bookCanvas'), {
+                width: 450, height: 600, showCover: false
+            });
+            pageFlip.loadFromHTML(document.querySelectorAll('.page'));
             
-            const bookCanvas = document.getElementById('bookCanvas');
-            bookCanvas.innerHTML = ''; // Clear previous
-
-            // Create 6 Sample Pages
-            for(let i=1; i<=6; i++) {
-                const page = document.createElement('div');
-                page.className = 'page';
-                page.style.backgroundColor = color;
-                page.innerHTML = `<div class="page-content">Entry #${i}<br>Write your thoughts here...</div>`;
-                bookCanvas.appendChild(page);
-            }
-
-            // Initialize 3D Flip Engine
-            setTimeout(() => {
-                pageFlip = new St.PageFlip(bookCanvas, {
-                    width: 450, height: 600,
-                    showCover: true, mobileScrollSupport: false
-                });
-                pageFlip.loadFromHTML(document.querySelectorAll('.page'));
-                
-                // Play sound on flip
-                pageFlip.on('flip', (e) => { flipSound.play(); });
-            }, 100);
+            // 1. FIX OVERLAP: Ensure canvas resizes to page
+            document.querySelectorAll('canvas').forEach(canvas => {
+                canvas.width = 450; canvas.height = 600;
+                setupCanvas(canvas);
+            });
         }
 
-        function closeBook() {
-            if(pageFlip) pageFlip.destroy();
-            document.getElementById('bookInterior').style.display = 'none';
+        // 7 & 10. DRAWING LOGIC
+        function setupCanvas(canvas) {
+            const ctx = canvas.getContext('2d');
+            let painting = false;
+            canvas.onmousedown = () => painting = true;
+            canvas.onmouseup = () => { painting = false; ctx.beginPath(); };
+            canvas.onmousemove = (e) => {
+                if (!painting || currentMode !== 'draw') return;
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+                ctx.strokeStyle = '#333';
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(e.offsetX, e.offsetY);
+            };
         }
 
-        function changeBackground() {
-            currentBg = currentBg >= 3 ? 1 : currentBg + 1;
-            document.getElementById('appBg').style.backgroundImage = `url('bg-${currentBg}.jpg')`;
-        }
+        function setMode(mode) { currentMode = mode; alert("Mode changed to: " + mode); }
+
+        function closeBook() { location.reload(); } // Simple reset to gallery
+
+        renderShelf();
     </script>
 </body>
 </html>
